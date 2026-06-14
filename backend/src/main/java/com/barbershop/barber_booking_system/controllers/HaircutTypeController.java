@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/haircut-types")
+    @RequestMapping("/api/haircuts")
 @CrossOrigin(origins = "*")
 public class HaircutTypeController {
 
@@ -20,8 +20,8 @@ public class HaircutTypeController {
         this.service = service;
     }
 
-    @GetMapping
-    public ResponseEntity<List<HaircutTypeDTO>> getAll() {
+    @GetMapping("/services")
+    public ResponseEntity<List<HaircutTypeDTO>> services() {
         return ResponseEntity.ok(service.getAll());
     }
 
