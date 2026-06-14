@@ -1,0 +1,47 @@
+# =========================
+# OS / IDE
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# ENV files
+# =========================
+.env
+
+# =========================
+# =========================
+# SPRING BOOT BACKEND
+# =========================
+barber_booking_system_backend/target/
+barber_booking_system_backend/*.jar
+barber_booking_system_backend/*.war
+barber_booking_system_backend/*.class
+barber_booking_system_backend/.mvn/
+barber_booking_system_backend/HELP.md
+barber_booking_system_backend/.gradle/
+barber_booking_system_backend/build/
+
+# =========================
+# ANGULAR FRONTEND
+# =========================
+barber-shop-app-frontend/node_modules/
+barber-shop-app-frontend/dist/
+barber-shop-app-frontend/.angular/
+barber-shop-app-frontend/.cache/
+barber-shop-app-frontend/out-tsc/
+
+# Angular env
+barber-shop-app-frontend/src/environments/*.local.ts
+
+# npm/yarn logs
+barber-shop-app-frontend/npm-debug.log*
+barber-shop-app-frontend/yarn-debug.log*
+barber-shop-app-frontend/yarn-error.log*
