@@ -34,13 +34,14 @@ public class AppointmentController {
     public ResponseEntity<AppointmentDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
-    @PatchMapping("/{id}")
+
+    @PatchMapping("/{id}/confirm")
     public ResponseEntity<Void> confirm(@PathVariable Long id) {
         service.confirm(id);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable Long id) {
         service.cancel(id);
         return ResponseEntity.ok().build();
