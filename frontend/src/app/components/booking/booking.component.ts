@@ -22,11 +22,19 @@ export class BookingComponent implements OnInit {
   bookingForm!: FormGroup;
 
   timeSlots: string[] = [
-    '09:00','09:30','10:00','10:30','11:00','11:30',
-    '12:00','12:30','13:00','13:30','14:00','14:30',
-    '15:00','15:30','16:00','16:30','17:00','17:30'
+    '09:00', '09:30',
+    '10:00', '10:30',
+    '11:00', '11:30',
+    '12:00', '12:30',
+    '13:00', '13:30',
+    '14:00', '14:30',
+    '15:00', '15:30',
+    '16:00', '16:30',
+    '17:00', '17:30',
+    '18:00', '18:30',
+    '19:00', '19:30',
+    '20:00', '20:30'
   ];
-
   blockedTimes: Set<string> = new Set();
   isSubmitting = false;
   errorMessage: string | null = null;
@@ -94,12 +102,6 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  getSelectedServiceDuration(): number {
-    const serviceId = this.bookingForm.get('serviceSelection')?.value;
-    if (!serviceId) return 60;
-    const service = this.servicesList.find(s => s.id === Number(serviceId));
-    return service?.duration || 60;
-  }
 
   checkAvailability() {
     const date = this.bookingForm.get('date')?.value;

@@ -27,7 +27,7 @@
         <button (click)="errorMessage = null" class="ml-3 text-red-600 hover:text-red-800 font-semibold">Dismiss</button>
       </div>
     }
-
+    @if (!successMessage) {
     <form class="space-y-8" [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -192,6 +192,7 @@
       </div>
 
     </form>
+    }
 
   </div>
 </div>
