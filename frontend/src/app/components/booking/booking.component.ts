@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { BookingService, CreateBookingRequest, BookedSlot } from "../../services/booking.service";
+import { AppointmentsService, CreateBookingRequest, BookedSlot } from "../../services/appointments.service";
 import { Router } from "@angular/router";
 import { HaircutService } from "../../services/haircut.service";
 import { HaircutModel } from "../../../models/haircut.model";
@@ -43,7 +43,7 @@ export class BookingComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private bookingService: BookingService,
+    private bookingService: AppointmentsService,
     private haircutService: HaircutService,
     private router: Router,
     private barberService: BarberService,

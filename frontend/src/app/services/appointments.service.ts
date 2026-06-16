@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import {AppointmentModel} from "../../models/AppointmentModel";
 
 export interface CreateBookingRequest {
   clientName: string;
@@ -37,7 +38,7 @@ export interface BlockedSlotsResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class BookingService {
+export class AppointmentsService {
   private apiUrl = `${environment.apiUrl}/appointments`;
 
   constructor(private http: HttpClient) {}
@@ -53,5 +54,9 @@ export class BookingService {
         params: { date, barberId }
       }
     );
+  }
+
+  getAllAppointments(): Observable<AppointmentModel[]> {
+    return this.http.get<AppointmentModel[]>(`${this.apiUrl}`)
   }
 }
