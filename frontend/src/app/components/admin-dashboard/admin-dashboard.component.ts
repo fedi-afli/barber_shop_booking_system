@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppointmentModel } from '../../../models/AppointmentModel';
 import { AppointmentsService } from '../../services/appointments.service';
+import {BarberService} from "../../services/barber.service";
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -17,16 +18,23 @@ export class AdminDashboardComponent implements OnInit {
   today: string = new Date().toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
+  selectedAppointment?: AppointmentModel;
+  showConfirmModal = false;
+  pendingAppointments: AppointmentModel[] = [];
 
-  constructor(private appointmentsService: AppointmentsService) {}
+  constructor(private appointmentsService: AppointmentsService) { }
 
   ngOnInit(): void {
     this.getAllAppointments();
+
   }
 
   getAllAppointments(): void {
     this.appointmentsService.getAllAppointments().subscribe(appointments => {
       this.appointments = appointments;
+
+      this.pendingAppointments = appointments.filter(a => a.status === 'PENDING');
+
     });
   }
 
@@ -65,7 +73,7 @@ export class AdminDashboardComponent implements OnInit {
   getTopBarbers(): { name: string; count: number }[] {
     const map = new Map<string, number>();
     this.appointments.forEach(a => {
-      const name = a.barber?.name ?? 'Unknown';
+      const name = a.barberName ?? "Unknown";
       map.set(name, (map.get(name) ?? 0) + 1);
     });
     return Array.from(map.entries())
@@ -79,12 +87,39 @@ export class AdminDashboardComponent implements OnInit {
   getTopServices(): { name: string; count: number }[] {
     const map = new Map<string, number>();
     this.appointments.forEach(a => {
-      const name = a.haircutType?.name ?? 'Unknown';
+      const name = a.haircutTypeName || 'Unknown';
       map.set(name, (map.get(name) ?? 0) + 1);
     });
     return Array.from(map.entries())
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
+  }
+  selectAppointment(appt: AppointmentModel) {
+    this.selectedAppointment = appt;
+    this.showConfirmModal = true;
+  }
+  confirmAppointment() {
+    if (!this.selectedAppointment?.id){
+      console.log("no appointment selected for confirmation");
+      return;
+    }
+
+    const id = this.selectedAppointment.id;
+
+    this.appointmentsService.confirmAppointment(id).subscribe(() => {
+
+      // update main list
+      this.appointments = this.appointments.map(a =>
+        a.id === id ? { ...a, status: 'CONFIRMED' } : a
+      );
+
+      // refresh pending list
+      this.pendingAppointments = this.appointments.filter(a => a.status === 'PENDING');
+
+      // close modal
+      this.showConfirmModal = false;
+      this.selectedAppointment = undefined;
+    });
   }
 }

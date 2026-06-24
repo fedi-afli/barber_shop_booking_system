@@ -59,4 +59,10 @@ export class AppointmentsService {
   getAllAppointments(): Observable<AppointmentModel[]> {
     return this.http.get<AppointmentModel[]>(`${this.apiUrl}`)
   }
+  confirmAppointment(id: number): Observable<void> {
+    return this.http.patch<void>(
+      `${this.apiUrl}/${id}/confirm`,
+      {}
+    );
+  }
 }

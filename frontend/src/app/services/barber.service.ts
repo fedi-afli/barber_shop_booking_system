@@ -19,4 +19,7 @@ export class BarberService {
   getActiveBarbers(): Observable<BarberModel[]> {
     return this.http.get<BarberModel[]>(this.apiUrl+"/barbers/active");
   }
+  getBarberName(barberId: number): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/barbers/${barberId}/name`);
+  }
 }

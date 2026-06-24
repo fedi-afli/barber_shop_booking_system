@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BarberService {
@@ -63,5 +64,10 @@ public class BarberService {
         Barber barber = getBarberById(id);
         barber.setActive(false);
         return repository.save(barber);
+    }
+
+    public String getBarberName(Long barberId) {
+        Optional<Barber> barber = this.repository.findById(barberId);
+        return barber.map(Barber::getName).orElse(null);
     }
 }

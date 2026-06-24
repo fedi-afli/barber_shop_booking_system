@@ -155,7 +155,9 @@ public class AppointmentService {
                 a.getClientPhone(),
                 a.getClientEmail(),
                 a.getBarber().getId(),
+                a.getBarber().getName(),
                 a.getHaircutType().getId(),
+                a.getHaircutType().getName(),
                 a.getDate().toString(),
                 a.getStartTime().toString(),
                 a.getStatus().name()

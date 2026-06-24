@@ -6,7 +6,9 @@ public record AppointmentDTO(
         String clientPhone,
         String clientEmail,
         Long barberId,
+        String barberName,
         Long haircutTypeId,
+        String haircutTypeName,
         String date,
         String startTime,
         String status

@@ -10,8 +10,10 @@ export interface AppointmentModel {
   clientPhone: string;
   clientEmail?: string;
 
-  barber: BarberModel;
-  haircutType: HaircutModel;
+  barberId: number;
+  barberName: string;
+  haircutTypeId: number;
+  haircutTypeName: string;
 
   date: string;       // LocalDate -> "2026-06-14"
   startTime: string;  // LocalTime -> "09:00:00"

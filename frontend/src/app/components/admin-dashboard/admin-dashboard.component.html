@@ -1,3 +1,4 @@
+
 <div class="flex min-h-screen bg-[#111111] text-[#e8e4dc] font-sans">
 
   <!-- ── Sidebar ── -->
@@ -96,111 +97,144 @@
     </section>
 
     <!-- ── Panels ── -->
-    <section class="grid grid-cols-[1fr_300px] gap-5 items-start">
 
-      <!-- Appointments Table -->
-      <div class="bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl overflow-hidden">
+    <section class="grid grid-cols-[1fr_240px] gap-5 items-start">
 
-        <!-- Panel header -->
-        <div class="flex items-center justify-between px-5 py-4 border-b border-[#2e2e2e]">
-          <span class="text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268]">All Appointments</span>
-          <div class="flex gap-1.5">
+      <!-- LEFT COLUMN: pending cards + full table -->
+      <div class="flex flex-col gap-5">
+
+        <!-- Pending Appointments -->
+        <div>
+          <h2 class="text-[11px] font-bold uppercase tracking-wider text-[#c9a84c] mb-3">
+            Pending Appointments
+          </h2>
+
+          <div
+            *ngFor="let appt of pendingAppointments"
+            class="bg-[#1a1a1a] border border-yellow-800 rounded-xl p-4 mb-2 hover:border-[#c9a84c] transition flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold text-base">{{ appt.clientName }}</h3>
+              <p class="text-xs text-[#7a7268] mt-1 leading-relaxed">
+                💈 {{ appt.barberName }} &nbsp;·&nbsp; ✂ {{ appt.haircutTypeName }} &nbsp;·&nbsp; {{ appt.date }} {{ appt.startTime }}
+              </p>
+            </div>
             <button
-              (click)="filterStatus = 'ALL'"
-              [class.bg-[#c9a84c]]="filterStatus === 'ALL'"
-              [class.border-[#c9a84c]]="filterStatus === 'ALL'"
-              [class.text-[#111]]="filterStatus === 'ALL'"
-              [class.font-bold]="filterStatus === 'ALL'"
-              [class.text-[#7a7268]]="filterStatus !== 'ALL'"
-              class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
-              All
+              class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-5 py-2 rounded-lg text-sm shrink-0 ml-4"
+              (click)="selectAppointment(appt)">
+              Confirm
             </button>
-            <button
-              (click)="filterStatus = 'PENDING'"
-              [class.bg-[#c9a84c]]="filterStatus === 'PENDING'"
-              [class.border-[#c9a84c]]="filterStatus === 'PENDING'"
-              [class.text-[#111]]="filterStatus === 'PENDING'"
-              [class.font-bold]="filterStatus === 'PENDING'"
-              [class.text-[#7a7268]]="filterStatus !== 'PENDING'"
-              class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
-              Pending
-            </button>
-            <button
-              (click)="filterStatus = 'CONFIRMED'"
-              [class.bg-[#c9a84c]]="filterStatus === 'CONFIRMED'"
-              [class.border-[#c9a84c]]="filterStatus === 'CONFIRMED'"
-              [class.text-[#111]]="filterStatus === 'CONFIRMED'"
-              [class.font-bold]="filterStatus === 'CONFIRMED'"
-              [class.text-[#7a7268]]="filterStatus !== 'CONFIRMED'"
-              class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
-              Confirmed
-            </button>
-            <button
-              (click)="filterStatus = 'CANCELLED'"
-              [class.bg-[#c9a84c]]="filterStatus === 'CANCELLED'"
-              [class.border-[#c9a84c]]="filterStatus === 'CANCELLED'"
-              [class.text-[#111]]="filterStatus === 'CANCELLED'"
-              [class.font-bold]="filterStatus === 'CANCELLED'"
-              [class.text-[#7a7268]]="filterStatus !== 'CANCELLED'"
-              class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
-              Cancelled
-            </button>
+          </div>
+
+          <div *ngIf="getPending() === 0" class="text-center text-[#7a7268] py-6 text-sm">
+            No pending appointments 🎉
           </div>
         </div>
 
-        <!-- Table -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm border-collapse">
-            <thead>
-            <tr>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">#</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Client</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Phone</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Barber</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Service</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Date</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Time</th>
-              <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let appt of getFiltered()" class="hover:bg-[#222] transition-colors">
-              <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.id ?? '—' }}</td>
-              <td class="px-4 py-3 border-b border-[#2e2e2e]">
-                <div class="flex items-center gap-2.5 font-semibold">
-                    <span class="w-7 h-7 rounded-full bg-[#222] border border-[#2e2e2e] flex items-center justify-center text-[11px] font-bold text-[#c9a84c] shrink-0">
-                      {{ appt.clientName.charAt(0) }}
-                    </span>
-                  {{ appt.clientName }}
-                </div>
-              </td>
-              <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.clientPhone }}</td>
-              <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.barber?.name ?? '—' }}</td>
-              <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.haircutType?.name ?? '—' }}</td>
-              <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.date }}</td>
-              <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.startTime }}</td>
-              <td class="px-4 py-3 border-b border-[#2e2e2e]">
-                  <span
-                    class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[.05em]"
-                    [ngClass]="{
-                      'bg-yellow-900/30 text-yellow-400':  appt.status === 'PENDING',
-                      'bg-emerald-900/30 text-emerald-400': appt.status === 'CONFIRMED',
-                      'bg-red-900/30 text-red-400':        appt.status === 'CANCELLED',
-                      'bg-[#222] text-[#7a7268]':          !appt.status
-                    }">
-                    {{ appt.status ?? 'N/A' }}
+        <!-- Full-width Appointments Table -->
+        <div class="bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl overflow-hidden">
+
+          <!-- Table header + filters -->
+          <div class="flex items-center justify-between px-5 py-4 border-b border-[#2e2e2e]">
+            <span class="text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268]">All Appointments</span>
+            <div class="flex gap-1.5">
+              <button
+                (click)="filterStatus = 'ALL'"
+                [class.bg-[#c9a84c]]="filterStatus === 'ALL'"
+                [class.border-[#c9a84c]]="filterStatus === 'ALL'"
+                [class.text-[#111]]="filterStatus === 'ALL'"
+                [class.font-bold]="filterStatus === 'ALL'"
+                [class.text-[#7a7268]]="filterStatus !== 'ALL'"
+                class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
+                All
+              </button>
+              <button
+                (click)="filterStatus = 'PENDING'"
+                [class.bg-[#c9a84c]]="filterStatus === 'PENDING'"
+                [class.border-[#c9a84c]]="filterStatus === 'PENDING'"
+                [class.text-[#111]]="filterStatus === 'PENDING'"
+                [class.font-bold]="filterStatus === 'PENDING'"
+                [class.text-[#7a7268]]="filterStatus !== 'PENDING'"
+                class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
+                Pending
+              </button>
+              <button
+                (click)="filterStatus = 'CONFIRMED'"
+                [class.bg-[#c9a84c]]="filterStatus === 'CONFIRMED'"
+                [class.border-[#c9a84c]]="filterStatus === 'CONFIRMED'"
+                [class.text-[#111]]="filterStatus === 'CONFIRMED'"
+                [class.font-bold]="filterStatus === 'CONFIRMED'"
+                [class.text-[#7a7268]]="filterStatus !== 'CONFIRMED'"
+                class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
+                Confirmed
+              </button>
+              <button
+                (click)="filterStatus = 'CANCELLED'"
+                [class.bg-[#c9a84c]]="filterStatus === 'CANCELLED'"
+                [class.border-[#c9a84c]]="filterStatus === 'CANCELLED'"
+                [class.text-[#111]]="filterStatus === 'CANCELLED'"
+                [class.font-bold]="filterStatus === 'CANCELLED'"
+                [class.text-[#7a7268]]="filterStatus !== 'CANCELLED'"
+                class="px-3 py-1 rounded-md border border-[#2e2e2e] text-xs transition-all">
+                Cancelled
+              </button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-collapse">
+              <thead>
+              <tr>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">#</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Client</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Phone</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Barber</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Service</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Date</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Time</th>
+                <th class="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] border-b border-[#2e2e2e]">Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let appt of getFiltered()" class="hover:bg-[#222] transition-colors">
+                <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.id ?? '—' }}</td>
+                <td class="px-4 py-3 border-b border-[#2e2e2e]">
+                  <div class="flex items-center gap-2.5 font-semibold">
+                  <span class="w-7 h-7 rounded-full bg-[#222] border border-[#2e2e2e] flex items-center justify-center text-[11px] font-bold text-[#c9a84c] shrink-0">
+                    {{ appt.clientName.charAt(0) }}
                   </span>
-              </td>
-            </tr>
-            <tr *ngIf="appointments.length === 0">
-              <td colspan="8" class="text-center text-[#7a7268] py-10 text-sm">No appointments found.</td>
-            </tr>
-            </tbody>
-          </table>
+                    {{ appt.clientName }}
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.clientPhone }}</td>
+                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.barberName ?? '—' }}</td>
+                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.haircutTypeName ?? '—' }}</td>
+                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.date }}</td>
+                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.startTime }}</td>
+                <td class="px-4 py-3 border-b border-[#2e2e2e]">
+                <span
+                  class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[.05em]"
+                  [ngClass]="{
+                    'bg-yellow-900/30 text-yellow-400':   appt.status === 'PENDING',
+                    'bg-emerald-900/30 text-emerald-400': appt.status === 'CONFIRMED',
+                    'bg-red-900/30 text-red-400':         appt.status === 'CANCELLED',
+                    'bg-[#222] text-[#7a7268]':           !appt.status
+                  }">
+                  {{ appt.status ?? 'N/A' }}
+                </span>
+                </td>
+              </tr>
+              <tr *ngIf="appointments.length === 0">
+                <td colspan="8" class="text-center text-[#7a7268] py-10 text-sm">No appointments found.</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
 
-      <!-- Side panels -->
+      <!-- RIGHT COLUMN: widgets only -->
       <div class="flex flex-col gap-4">
 
         <!-- Top Barbers -->
@@ -211,9 +245,9 @@
           <ul>
             <li *ngFor="let b of getTopBarbers()"
                 class="flex items-center gap-2.5 px-5 py-3 border-b border-[#2e2e2e] last:border-b-0 text-sm">
-              <span class="w-8 h-8 rounded-full bg-[#222] flex items-center justify-center text-xs font-bold text-[#c9a84c] shrink-0">
-                {{ b.name.charAt(0) }}
-              </span>
+          <span class="w-8 h-8 rounded-full bg-[#222] flex items-center justify-center text-xs font-bold text-[#c9a84c] shrink-0">
+            {{ b.name.charAt(0) }}
+          </span>
               <span class="flex-1">{{ b.name }}</span>
               <span class="font-bold text-[#c9a84c]">{{ b.count }}</span>
             </li>
@@ -245,7 +279,6 @@
                       [attr.stroke-dasharray]="getArc('CANCELLED') + ' 301.6'"
                       [attr.stroke-dashoffset]="75.4 - getArc('CONFIRMED') - getArc('PENDING')"/>
               <text x="60" y="56" text-anchor="middle"
-                    class="rotate-90 origin-center"
                     style="font-size:22px;font-weight:800;fill:#e8e4dc;transform:rotate(90deg);transform-origin:center">
                 {{ appointments.length }}
               </text>
@@ -294,7 +327,64 @@
         </div>
 
       </div>
+
     </section>
+    <!-- Appointment Preview + Confirm Modal -->
+    <div *ngIf="showConfirmModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+      <div class="bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl w-[340px] overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-5 py-4 border-b border-[#2e2e2e]">
+          <h2 class="text-sm font-bold text-[#c9a84c] uppercase tracking-wide">
+            Appointment Preview
+          </h2>
+        </div>
+
+        <!-- Card body -->
+        <div class="p-5 text-sm space-y-2 text-[#e8e4dc]">
+
+          <div class="font-bold text-lg">
+            {{ selectedAppointment?.clientName }}
+          </div>
+
+          <div class="text-[#7a7268]">
+            💈 {{ selectedAppointment?.barberName }}
+          </div>
+
+          <div class="text-[#7a7268]">
+            ✂ {{ selectedAppointment?.haircutTypeName }}
+          </div>
+
+          <div class="text-[#7a7268]">
+            📅 {{ selectedAppointment?.date }}
+          </div>
+
+          <div class="text-[#7a7268]">
+            🕘 {{ selectedAppointment?.startTime }}
+          </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-2 px-5 py-4 border-t border-[#2e2e2e]">
+
+          <button
+            class="px-4 py-2 text-xs rounded-lg bg-[#2e2e2e] hover:bg-[#3a3a3a]"
+            (click)="showConfirmModal = false">
+            Cancel
+          </button>
+
+          <button
+            class="px-4 py-2 text-xs rounded-lg bg-emerald-500 text-black font-bold hover:bg-emerald-600"
+            (click)="confirmAppointment()">
+            Confirm
+          </button>
+
+        </div>
+
+      </div>
+    </div>
 
   </main>
 </div>

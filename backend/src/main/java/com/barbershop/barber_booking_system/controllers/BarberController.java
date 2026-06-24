@@ -69,4 +69,8 @@ public class BarberController {
     public ResponseEntity<Barber> deactivateBarber(@PathVariable Long id) {
         return ResponseEntity.ok(barberService.deactivateBarber(id));
     }
+    @GetMapping("/{id}/name")
+    public ResponseEntity<String> getBarberNameById(@PathVariable Long id) {
+        return ResponseEntity.ok(barberService.getBarberName(id));
+    }
 }
