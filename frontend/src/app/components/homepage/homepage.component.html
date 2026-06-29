@@ -14,11 +14,18 @@
       <p class="text-gray-300 mt-4 text-base md:text-lg max-w-lg mx-auto">
         The premier barber shop in Tunis — fast, clean, and meticulously professional.
       </p>
+      <!-- Replace the single book button in the hero section with this -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button (click)="NavigateToBooking()"
+                class="w-full sm:w-auto px-10 py-4 bg-yellow-500 hover:bg-yellow-400 text-black rounded-full font-bold shadow-lg hover:shadow-yellow-500/20 active:scale-95 transition-all duration-300">
+          Book as Guest
+        </button>
 
-      <button (click)="NavigateToBooking()"
-        class="mt-8 w-full sm:w-auto px-10 py-4 bg-yellow-500 hover:bg-yellow-400 text-black rounded-full font-bold shadow-lg hover:shadow-yellow-500/20 active:scale-95 transition-all duration-300">
-        Book Your Seat
-      </button>
+        <button (click)="NavigateToLogin()"
+                class="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-full font-bold backdrop-blur-sm active:scale-95 transition-all duration-300">
+          Login to Book
+        </button>
+      </div>
 
     </div>
   </section>
@@ -131,10 +138,18 @@
           Skip the wait. Book your appointment in seconds.
         </p>
 
-        <button (click)="NavigateToBooking()"
-          class="w-full sm:w-auto px-12 py-4 bg-yellow-500 hover:bg-yellow-400 text-black rounded-full font-bold shadow-lg active:scale-95 transition-all duration-300 text-lg">
-          Book Now
-        </button>
+        <!-- Replace the single Book Now button in the dark CTA section with this -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button (click)="NavigateToBooking()"
+                  class="w-full sm:w-auto px-12 py-4 bg-yellow-500 hover:bg-yellow-400 text-black rounded-full font-bold shadow-lg active:scale-95 transition-all duration-300 text-lg">
+            Book as Guest
+          </button>
+
+          <button (click)="NavigateToLogin()"
+                  class="w-full sm:w-auto px-12 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-full font-bold backdrop-blur-sm active:scale-95 transition-all duration-300 text-lg">
+            Login to Book
+          </button>
+        </div>
       </div>
 
     </div>

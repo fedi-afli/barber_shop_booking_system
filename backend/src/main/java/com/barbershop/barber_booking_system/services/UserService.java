@@ -6,6 +6,7 @@ import com.barbershop.barber_booking_system.entities.Role;
 import com.barbershop.barber_booking_system.entities.User;
 import com.barbershop.barber_booking_system.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDTO> getAll() {
@@ -39,7 +42,7 @@ public class UserService {
 
         User user = User.builder()
                 .username(dto.username())
-                .password(dto.password())
+                .password(passwordEncoder.encode(dto.password()))
                 .role(Role.valueOf(dto.role().toUpperCase()))
                 .build();
 
@@ -72,6 +75,6 @@ public class UserService {
     }
 
     private UserDTO toDTO(User u) {
-        return new UserDTO(u.getId(), u.getUsername(), u.getRole().name());
+        return new UserDTO(u.getId(), u.getUsername(),u.getEmail(), u.getRole().name(),u.getPassword());
     }
 }
