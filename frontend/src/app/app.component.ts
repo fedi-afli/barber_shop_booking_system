@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterOutlet} from '@angular/router';
+import {AuthentificationService} from "./services/authentification.service";
+import {UserModel} from "../models/UserModel";
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,33 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'barber_booking_system';
+export class AppComponent implements OnInit {
+  isLoggedIn = false;
+  currentUser: UserModel | null = null;
+  menuOpen = false;
+
+  constructor(
+    private authService: AuthentificationService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn  = this.authService.isLoggedIn();
+    this.currentUser = this.authService.getCurrentUser();
+  }
+
+  bookNow(): void {
+    this.router.navigate(['/booking']);
+  }
+
+  login(): void {
+    this.router.navigate(['/login']);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.isLoggedIn  = false;
+    this.currentUser = null;
+    this.router.navigate(['/']);
+  }
 }

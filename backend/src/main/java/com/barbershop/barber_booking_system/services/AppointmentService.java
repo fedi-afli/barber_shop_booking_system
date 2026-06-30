@@ -227,4 +227,12 @@ public class AppointmentService {
         return String.format("%02d:%02d", time.getHour(), time.getMinute());
     }
 
+
+    public List<AppointmentDTO> getBarberAppointments(Long id) {
+        return this.repository.findByBarberId(id)
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
 }

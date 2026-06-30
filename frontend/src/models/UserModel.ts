@@ -6,5 +6,6 @@ export interface UserModel {
   username: string;
   role: string;
   email?: string;
+  barberId?: number;
 
 }

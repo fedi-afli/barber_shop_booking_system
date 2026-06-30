@@ -1,0 +1,189 @@
+<div class="flex min-h-screen bg-[#111111] text-[#e8e4dc] font-sans">
+
+  <!-- ── Sidebar ── -->
+  <aside class="w-[220px] shrink-0 bg-[#1a1a1a] border-r border-[#2e2e2e] flex flex-col py-7 sticky top-0 h-screen">
+
+    <div class="flex items-center gap-2.5 px-6 pb-8 font-bold text-[#c9a84c] tracking-wide">
+      <span class="-rotate-45 inline-block text-xl">✂</span>
+      <span>BarberHub</span>
+    </div>
+
+    <nav class="flex flex-col gap-0.5 px-3 flex-1">
+      <a class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-semibold bg-[#222] text-[#c9a84c] cursor-pointer">
+        <span class="w-4 text-center text-xs">📅</span> My Appointments
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-2 px-6 text-xs text-[#7a7268]">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      Live
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="flex-1 flex flex-col px-8 pb-10 overflow-x-hidden">
+
+    <!-- Topbar -->
+    <header class="flex items-center justify-between py-7 border-b border-[#2e2e2e] mb-7">
+      <div>
+        <h1 class="text-xl font-bold tracking-tight mb-0.5">My Appointments</h1>
+        <span class="text-xs text-[#7a7268]">{{ today }}</span>
+      </div>
+      <div class="w-9 h-9 rounded-full bg-[#c9a84c] text-[#111] flex items-center justify-center font-bold text-sm">B</div>
+    </header>
+
+    <!-- ── KPI Grid ── -->
+    <section class="grid grid-cols-3 gap-4 mb-7">
+
+      <div class="relative bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl p-5 overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-[3px] bg-[#e8d8a0]"></div>
+        <p class="text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] mb-2">Pending</p>
+        <p class="text-4xl font-extrabold tracking-tight leading-none">{{ getPending() }}</p>
+      </div>
+
+      <div class="relative bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl p-5 overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-[3px] bg-emerald-500"></div>
+        <p class="text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] mb-2">Confirmed</p>
+        <p class="text-4xl font-extrabold tracking-tight leading-none">{{ getConfirmed() }}</p>
+      </div>
+
+      <div class="relative bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl p-5 overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-[3px] bg-[#b04a3a]"></div>
+        <p class="text-[10px] font-bold uppercase tracking-[.08em] text-[#7a7268] mb-2">Cancelled</p>
+        <p class="text-4xl font-extrabold tracking-tight leading-none">{{ getCancelled() }}</p>
+      </div>
+
+    </section>
+
+    <!-- Filters -->
+    <div class="flex gap-1.5 mb-5">
+      <button
+        (click)="setFilter('ALL')"
+        [class.bg-[#c9a84c]]="filterStatus === 'ALL'"
+        [class.text-[#111]]="filterStatus === 'ALL'"
+        [class.font-bold]="filterStatus === 'ALL'"
+        [class.text-[#7a7268]]="filterStatus !== 'ALL'"
+        class="px-3 py-1.5 rounded-md border border-[#2e2e2e] text-xs transition-all">
+        All
+      </button>
+      <button
+        (click)="setFilter('PENDING')"
+        [class.bg-[#c9a84c]]="filterStatus === 'PENDING'"
+        [class.text-[#111]]="filterStatus === 'PENDING'"
+        [class.font-bold]="filterStatus === 'PENDING'"
+        [class.text-[#7a7268]]="filterStatus !== 'PENDING'"
+        class="px-3 py-1.5 rounded-md border border-[#2e2e2e] text-xs transition-all">
+        Pending
+      </button>
+      <button
+        (click)="setFilter('CONFIRMED')"
+        [class.bg-[#c9a84c]]="filterStatus === 'CONFIRMED'"
+        [class.text-[#111]]="filterStatus === 'CONFIRMED'"
+        [class.font-bold]="filterStatus === 'CONFIRMED'"
+        [class.text-[#7a7268]]="filterStatus !== 'CONFIRMED'"
+        class="px-3 py-1.5 rounded-md border border-[#2e2e2e] text-xs transition-all">
+        Confirmed
+      </button>
+      <button
+        (click)="setFilter('CANCELLED')"
+        [class.bg-[#c9a84c]]="filterStatus === 'CANCELLED'"
+        [class.text-[#111]]="filterStatus === 'CANCELLED'"
+        [class.font-bold]="filterStatus === 'CANCELLED'"
+        [class.text-[#7a7268]]="filterStatus !== 'CANCELLED'"
+        class="px-3 py-1.5 rounded-md border border-[#2e2e2e] text-xs transition-all">
+        Cancelled
+      </button>
+    </div>
+
+    <!-- ── Appointments grouped by date ── -->
+    <div class="flex flex-col gap-6">
+
+      <div *ngFor="let group of groupedAppointments">
+
+        <h2 class="text-[11px] font-bold uppercase tracking-wider text-[#c9a84c] mb-3 flex items-center gap-2">
+          📅 {{ formatDateHeader(group.date) }}
+          <span class="text-[#7a7268] font-normal normal-case tracking-normal">({{ group.appointments.length }})</span>
+        </h2>
+
+        <div class="flex flex-col gap-2 mb-2">
+          <div
+            *ngFor="let appt of group.appointments"
+            class="bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl p-4 hover:border-[#c9a84c] transition flex items-center justify-between">
+
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-[#222] border border-[#2e2e2e] flex items-center justify-center text-[11px] font-bold text-[#c9a84c] shrink-0">
+                {{ appt.clientName.charAt(0) }}
+              </span>
+              <div>
+                <h3 class="font-semibold text-sm">{{ appt.clientName }}</h3>
+                <p class="text-xs text-[#7a7268] mt-0.5">
+                  ✂ {{ appt.haircutTypeName ?? 'N/A' }} &nbsp;·&nbsp; 🕘 {{ appt.startTime }} &nbsp;·&nbsp; 📞 {{ appt.clientPhone }}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 shrink-0">
+              <span
+                class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-[.05em]"
+                [ngClass]="{
+                  'bg-yellow-900/30 text-yellow-400':   appt.status === 'PENDING',
+                  'bg-emerald-900/30 text-emerald-400': appt.status === 'CONFIRMED',
+                  'bg-red-900/30 text-red-400':         appt.status === 'CANCELLED'
+                }">
+                {{ appt.status }}
+              </span>
+
+              <button
+                *ngIf="appt.status === 'PENDING'"
+                class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-4 py-1.5 rounded-lg text-xs"
+                (click)="selectAppointment(appt)">
+                Confirm
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="groupedAppointments.length === 0" class="text-center text-[#7a7268] py-16 text-sm">
+        No appointments found.
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Confirm Modal -->
+  <div *ngIf="showConfirmModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-[#1a1a1a] border border-[#2e2e2e] rounded-xl w-[340px] overflow-hidden">
+
+      <div class="px-5 py-4 border-b border-[#2e2e2e]">
+        <h2 class="text-sm font-bold text-[#c9a84c] uppercase tracking-wide">Appointment Preview</h2>
+      </div>
+
+      <div class="p-5 text-sm space-y-2 text-[#e8e4dc]">
+        <div class="font-bold text-lg">{{ selectedAppointment?.clientName }}</div>
+        <div class="text-[#7a7268]">✂ {{ selectedAppointment?.haircutTypeName }}</div>
+        <div class="text-[#7a7268]">📅 {{ selectedAppointment?.date }}</div>
+        <div class="text-[#7a7268]">🕘 {{ selectedAppointment?.startTime }}</div>
+        <div class="text-[#7a7268]">📞 {{ selectedAppointment?.clientPhone }}</div>
+      </div>
+
+      <div class="flex justify-end gap-2 px-5 py-4 border-t border-[#2e2e2e]">
+        <button
+          class="px-4 py-2 text-xs rounded-lg bg-[#2e2e2e] hover:bg-[#3a3a3a]"
+          (click)="showConfirmModal = false">
+          Cancel
+        </button>
+        <button
+          class="px-4 py-2 text-xs rounded-lg bg-emerald-500 text-black font-bold hover:bg-emerald-600"
+          (click)="confirmAppointment()">
+          Confirm
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

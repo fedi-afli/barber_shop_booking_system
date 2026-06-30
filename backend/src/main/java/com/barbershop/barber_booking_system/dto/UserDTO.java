@@ -5,5 +5,6 @@
             String username,
             String email,
             String role,
-            String password
+            String password,
+            Long barberId
     ) {}

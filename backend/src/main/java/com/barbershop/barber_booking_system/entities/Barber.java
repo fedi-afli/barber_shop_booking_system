@@ -24,4 +24,8 @@ public class Barber {
 
     @Column(nullable = false)
     private Boolean active;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+    private User user;
 }

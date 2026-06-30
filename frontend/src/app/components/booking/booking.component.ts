@@ -8,11 +8,13 @@ import { HaircutModel } from "../../../models/haircut.model";
 import { NgClass } from '@angular/common';
 import { BarberModel } from "../../../models/BarberModel";
 import { BarberService } from "../../services/barber.service";
+import { AuthentificationService } from "../../services/authentification.service";
+import { UserModel} from "../../../models/UserModel";
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass,CommonModule],
+  imports: [ReactiveFormsModule, NgClass, CommonModule],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css'
 })
@@ -22,19 +24,14 @@ export class BookingComponent implements OnInit {
   activeBarbers: BarberModel[] = [];
   bookingForm!: FormGroup;
 
+  currentUser: UserModel | null = null;
+  isLoggedIn = false;
+
   timeSlots: string[] = [
-    '09:00', '09:30',
-    '10:00', '10:30',
-    '11:00', '11:30',
-    '12:00', '12:30',
-    '13:00', '13:30',
-    '14:00', '14:30',
-    '15:00', '15:30',
-    '16:00', '16:30',
-    '17:00', '17:30',
-    '18:00', '18:30',
-    '19:00', '19:30',
-    '20:00', '20:30'
+    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+    '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+    '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+    '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'
   ];
   blockedTimes: Set<string> = new Set();
   isSubmitting = false;
@@ -48,9 +45,13 @@ export class BookingComponent implements OnInit {
     private haircutService: HaircutService,
     private router: Router,
     private barberService: BarberService,
+    private authService: AuthentificationService,
   ) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.currentUser = this.authService.getCurrentUser();
+
     this.initForm();
     this.getServices();
     this.getActiveBarbers();
@@ -58,10 +59,17 @@ export class BookingComponent implements OnInit {
   }
 
   initForm() {
+    // ✅ Logged-in users skip identity fields, guests must fill them
     this.bookingForm = this.fb.group({
-      fullName: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9+ ]{8,15}$')]],
-      email: [''],
+      fullName: [
+        this.isLoggedIn ? this.currentUser?.username : '',
+        this.isLoggedIn ? [] : [Validators.required]
+      ],
+      phoneNumber: [
+        '',
+        this.isLoggedIn ? [] : [Validators.required, Validators.pattern('^[0-9+ ]{8,15}$')]
+      ],
+      email: [this.isLoggedIn ? this.currentUser?.email : ''],
       serviceSelection: ['', Validators.required],
       barber: ['', Validators.required],
       date: [''],
@@ -162,10 +170,12 @@ export class BookingComponent implements OnInit {
     this.successMessage = null;
 
     const formValue = this.bookingForm.value;
+
     const request: CreateBookingRequest = {
-      clientName: formValue.fullName,
-      clientPhone: formValue.phoneNumber,
-      clientEmail: formValue.email || undefined,
+      // ✅ use stored user info if logged in, otherwise form input
+      clientName:  this.isLoggedIn ? (this.currentUser?.username ?? '') : formValue.fullName,
+      clientPhone: this.isLoggedIn ? (formValue.phoneNumber || '') : formValue.phoneNumber,
+      clientEmail: this.isLoggedIn ? this.currentUser?.email : (formValue.email || undefined),
       barberId: Number(formValue.barber),
       haircutTypeId: Number(formValue.serviceSelection),
       date: formValue.date,

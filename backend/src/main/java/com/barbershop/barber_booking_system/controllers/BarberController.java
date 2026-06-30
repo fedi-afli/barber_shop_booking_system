@@ -1,6 +1,8 @@
 package com.barbershop.barber_booking_system.controllers;
 
+import com.barbershop.barber_booking_system.dto.AppointmentDTO;
 import com.barbershop.barber_booking_system.entities.Barber;
+import com.barbershop.barber_booking_system.services.AppointmentService;
 import com.barbershop.barber_booking_system.services.BarberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 public class BarberController {
 
     private final BarberService barberService;
+    private final AppointmentService appointmentService;
 
     // GET /api/barbers
     @GetMapping
@@ -73,4 +76,9 @@ public class BarberController {
     public ResponseEntity<String> getBarberNameById(@PathVariable Long id) {
         return ResponseEntity.ok(barberService.getBarberName(id));
     }
+    @GetMapping("/{id}/appointments")
+    public ResponseEntity<List<AppointmentDTO>> getBarberAppointments(@PathVariable Long id) {
+        return ResponseEntity.ok(appointmentService.getBarberAppointments(id));
+    }
 }
+ 

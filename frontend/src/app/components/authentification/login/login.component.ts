@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router, RouterLink} from "@angular/router";
+import {AuthentificationService} from "../../../services/authentification.service";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -18,7 +21,7 @@ export class LoginComponent {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router,private authService:AuthentificationService) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -36,22 +39,33 @@ export class LoginComponent {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading    = true;
     this.errorMessage = '';
 
-    const {username, password} = this.loginForm.value;
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        const role = response.user.role;
 
-    // TODO: call your AuthService here
-    // this.authService.login({ username, password }).subscribe({
-    //   next: (user) => {
-    //     if (user.role === UserRole.CLIENT) this.router.navigate(['/booking']);
-    //     else this.router.navigate(['/dashboard']);
-    //   },
-    //   error: (err) => {
-    //     this.errorMessage = 'Invalid username or password.';
-    //     this.isLoading = false;
-    //   }
-    // });
+        if (role === 'ADMIN') {
+          this.router.navigate(['/admin']);
+        } else if (role === 'BARBER') {
+          this.router.navigate(['/barber']);
+        } else {
+          this.router.navigate(['/booking']);
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        if (err.status === 404) {
+          this.errorMessage = 'User not found.';
+        } else if (err.status === 401) {
+          this.errorMessage = 'Wrong password.';
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+        }
+      }
+    });
   }
 
   continueAsGuest(): void {

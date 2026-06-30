@@ -4,7 +4,7 @@ import { BarberModel } from "./BarberModel";
 import { HaircutModel } from "./haircut.model";
 
 export interface AppointmentModel {
-  id?: number;
+  id: number;
 
   clientName: string;
   clientPhone: string;

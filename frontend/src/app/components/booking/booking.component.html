@@ -31,35 +31,24 @@
     @if (!successMessage) {
       <form class="space-y-8" [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-2">Full Name</label>
-            <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </span>
-              <input
-                type="text"
-                formControlName="fullName"
-                placeholder="Enter your full name"
-                class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/40 focus:border-yellow-500 focus:bg-white transition-all duration-200 placeholder:text-gray-400"
-                [class.border-red-400]="bookingForm.get('fullName')?.invalid && bookingForm.get('fullName')?.touched">
-            </div>
-            @if (bookingForm.get('fullName')?.invalid && bookingForm.get('fullName')?.touched) {
-              <p class="text-red-500 text-sm mt-1">Please enter your full name</p>
-            }
+        @if (isLoggedIn) {
+          <div class="bg-yellow-50/60 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
+            <svg class="w-5 h-5 text-yellow-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p class="text-sm font-medium text-gray-700">
+              Booking as <span class="font-bold text-gray-900">{{ currentUser?.username }}</span>
+            </p>
           </div>
 
-          <div>
+          <div class="max-w-sm mx-auto w-full">
             <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-2">Phone Number</label>
             <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.97.76l1.1 4.39a1 1 0 01-.5 1.13l-1.9 1a16 16 0 007.07 7.07l1-1.9a1 1 0 011.13-.5l4.39 1.1a1 1 0 01.76.97V19a2 2 0 01-2 2h-1C9.6 21 3 14.4 3 6V5z" />
-              </svg>
-            </span>
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.97.76l1.1 4.39a1 1 0 01-.5 1.13l-1.9 1a16 16 0 007.07 7.07l1-1.9a1 1 0 011.13-.5l4.39 1.1a1 1 0 01.76.97V19a2 2 0 01-2 2h-1C9.6 21 3 14.4 3 6V5z" />
+            </svg>
+          </span>
               <input
                 type="tel"
                 formControlName="phoneNumber"
@@ -71,27 +60,68 @@
               <p class="text-red-500 text-sm mt-1">Please enter a valid phone number</p>
             }
           </div>
-        </div>
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-2">Full Name</label>
+              <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </span>
+                <input
+                  type="text"
+                  formControlName="fullName"
+                  placeholder="Enter your full name"
+                  class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/40 focus:border-yellow-500 focus:bg-white transition-all duration-200 placeholder:text-gray-400"
+                  [class.border-red-400]="bookingForm.get('fullName')?.invalid && bookingForm.get('fullName')?.touched">
+              </div>
+              @if (bookingForm.get('fullName')?.invalid && bookingForm.get('fullName')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Please enter your full name</p>
+              }
+            </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-2 flex justify-between">
-            <span>Email Address</span>
-            <span class="text-xs font-normal text-gray-400 italic">Optional</span>
-          </label>
-          <div class="relative">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-2">Phone Number</label>
+              <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.97.76l1.1 4.39a1 1 0 01-.5 1.13l-1.9 1a16 16 0 007.07 7.07l1-1.9a1 1 0 011.13-.5l4.39 1.1a1 1 0 01.76.97V19a2 2 0 01-2 2h-1C9.6 21 3 14.4 3 6V5z" />
+              </svg>
+            </span>
+                <input
+                  type="tel"
+                  formControlName="phoneNumber"
+                  placeholder="e.g., 22 345 678"
+                  class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/40 focus:border-yellow-500 focus:bg-white transition-all duration-200 placeholder:text-gray-400"
+                  [class.border-red-400]="bookingForm.get('phoneNumber')?.invalid && bookingForm.get('phoneNumber')?.touched">
+              </div>
+              @if (bookingForm.get('phoneNumber')?.invalid && bookingForm.get('phoneNumber')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Please enter a valid phone number</p>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-2 flex justify-between">
+              <span>Email Address</span>
+              <span class="text-xs font-normal text-gray-400 italic">Optional</span>
+            </label>
+            <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </span>
-            <input
-              type="email"
-              formControlName="email"
-              placeholder="example@email.com"
-              class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/40 focus:border-yellow-500 focus:bg-white transition-all duration-200 placeholder:text-gray-400">
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="example@email.com"
+                class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/40 focus:border-yellow-500 focus:bg-white transition-all duration-200 placeholder:text-gray-400">
+            </div>
           </div>
-        </div>
-
+        }
         <div>
           <label class="block text-sm font-semibold text-gray-700 tracking-wide mb-3">Select a Service</label>
 

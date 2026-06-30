@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 import {BarberModel} from "../../models/BarberModel";
+import {AppointmentModel} from "../../models/AppointmentModel";
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +23,6 @@ export class BarberService {
   getBarberName(barberId: number): Observable<string> {
     return this.http.get<string>(`${this.apiUrl}/barbers/${barberId}/name`);
   }
+
+
 }

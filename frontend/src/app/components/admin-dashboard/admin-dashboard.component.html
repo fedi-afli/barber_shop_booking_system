@@ -197,7 +197,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let appt of getFiltered()" class="hover:bg-[#222] transition-colors">
-                <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.id ?? '—' }}</td>
+                <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.id  }}</td>
                 <td class="px-4 py-3 border-b border-[#2e2e2e]">
                   <div class="flex items-center gap-2.5 font-semibold">
                   <span class="w-7 h-7 rounded-full bg-[#222] border border-[#2e2e2e] flex items-center justify-center text-[11px] font-bold text-[#c9a84c] shrink-0">
@@ -207,8 +207,8 @@
                   </div>
                 </td>
                 <td class="px-4 py-3 text-xs text-[#7a7268] border-b border-[#2e2e2e]">{{ appt.clientPhone }}</td>
-                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.barberName ?? '—' }}</td>
-                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.haircutTypeName ?? '—' }}</td>
+                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.barberName  }}</td>
+                <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.haircutTypeName  }}</td>
                 <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.date }}</td>
                 <td class="px-4 py-3 text-sm border-b border-[#2e2e2e]">{{ appt.startTime }}</td>
                 <td class="px-4 py-3 border-b border-[#2e2e2e]">
