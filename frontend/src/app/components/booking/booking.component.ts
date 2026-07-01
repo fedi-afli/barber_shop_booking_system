@@ -115,8 +115,9 @@ export class BookingComponent implements OnInit {
   checkAvailability() {
     const date = this.bookingForm.get('date')?.value;
     const barberId = Number(this.bookingForm.get('barber')?.value);
+    const haircutTypeId=Number(this.bookingForm.get('serviceSelection')?.value);
 
-    if (!date || !barberId) {
+    if (!date || !barberId || !haircutTypeId) {
       this.blockedTimes.clear();
       return;
     }

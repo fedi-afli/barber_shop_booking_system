@@ -20,11 +20,13 @@
       <span class="hidden sm:block text-sm text-gray-300">
         Hi, <span class="font-semibold text-yellow-500">{{ currentUser?.username }}</span>
       </span>
+      @if (currentUser?.role=="CLIENT"){
+        <button (click)="bookNow()"
+                class="bg-yellow-500 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition">
+          Book Now
+        </button>
+      }
 
-      <button (click)="bookNow()"
-              class="bg-yellow-500 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition">
-        Book Now
-      </button>
 
       <button (click)="logout()"
               class="text-gray-300 hover:text-red-400 text-sm font-medium transition">

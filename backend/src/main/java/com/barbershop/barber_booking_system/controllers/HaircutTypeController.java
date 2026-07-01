@@ -22,6 +22,7 @@ public class HaircutTypeController {
 
     @GetMapping("/services")
     public ResponseEntity<List<HaircutTypeDTO>> services() {
+
         return ResponseEntity.ok(service.getAll());
     }
 

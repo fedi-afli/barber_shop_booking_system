@@ -6,12 +6,13 @@ import {AdminDashboardComponent} from "./components/admin-dashboard/admin-dashbo
 import {LoginComponent} from "./components/authentification/login/login.component";
 import {SignupComponent} from "./components/authentification/signup/signup.component";
 import {BarberDashboardComponent} from "./components/barber-dashboard/barber-dashboard.component";
+import {authGuard} from "./guards/auth.guard";
 
 export const routes: Routes = [
   {path: '', component: HomepageComponent},
-  {path: 'booking', component: BookingComponent},
-  {path:'admin',component:AdminDashboardComponent},
   {path:'login', component:LoginComponent},
   {path:'signup', component:SignupComponent},
-  {path:'barber', component:BarberDashboardComponent},
+  {path: 'booking', component: BookingComponent},
+  {path:'barber', canActivate:[authGuard],component:BarberDashboardComponent},
+  {path:'admin',canActivate:[authGuard],component:AdminDashboardComponent}
 ];

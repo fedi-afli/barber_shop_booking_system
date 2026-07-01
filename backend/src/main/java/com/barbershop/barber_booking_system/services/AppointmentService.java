@@ -23,7 +23,7 @@ import java.util.List;
 public class AppointmentService {
 
     private static final LocalTime BUSINESS_OPEN = LocalTime.of(9, 0);
-    private static final LocalTime BUSINESS_CLOSE = LocalTime.of(18, 0);
+    private static final LocalTime BUSINESS_CLOSE = LocalTime.of(22, 0);
     private static final int SLOT_DURATION_MINUTES = 30;
 
     private final AppointmentRepository repository;

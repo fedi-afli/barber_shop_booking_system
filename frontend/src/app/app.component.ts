@@ -10,19 +10,19 @@ import {UserModel} from "../models/UserModel";
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
+
   isLoggedIn = false;
   currentUser: UserModel | null = null;
-  menuOpen = false;
 
   constructor(
     private authService: AuthentificationService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.isLoggedIn  = this.authService.isLoggedIn();
-    this.currentUser = this.authService.getCurrentUser();
+  ) {
+    this.authService.user$.subscribe(user => {
+      this.currentUser = user;
+      this.isLoggedIn = !!user;
+    });
   }
 
   bookNow(): void {
@@ -35,8 +35,6 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.isLoggedIn  = false;
-    this.currentUser = null;
     this.router.navigate(['/']);
   }
 }
